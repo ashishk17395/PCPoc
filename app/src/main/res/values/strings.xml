@@ -2,4 +2,6 @@
     <string name="app_name">PCPoc</string>
     <string name="device_admin_description"> Description why this is needed by the app</string>
     <string name="label_device_admin">Label for the device admin</string>
+    <string name="accessibility_service_label">This is accessibility service label</string>
+    <string name="accessibility_service_description">This is accessibility service description</string>
 </resources>

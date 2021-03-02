@@ -10,8 +10,9 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
+import com.ta.pcpoc.deviceAdmin.AppAdminReceiver
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 
         if(devicePolicyManager.isAdminActive(demoDeviceAdmin))
             findViewById<TextView>(R.id.deviceAdmin).setTextColor(Color.GREEN)
+        //Make your text green if permission etc.. is given.
+        //Open activity etc on second click
 
     }
 
@@ -59,7 +62,9 @@ class MainActivity : AppCompatActivity() {
 
         if(devicePolicyManager.isAdminActive(demoDeviceAdmin))
         {
+            //Minor test of restriction
             devicePolicyManager.setCameraDisabled(demoDeviceAdmin, true)
+            Toast.makeText(this, "Camera disabled", Toast.LENGTH_LONG).show()
         }
         else {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)

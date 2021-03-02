@@ -1,4 +1,4 @@
-package com.ta.pcpoc
+package com.ta.pcpoc.deviceAdmin
 
 import android.app.admin.DeviceAdminReceiver
 import android.content.Context
