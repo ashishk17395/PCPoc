@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is child's device. Setup:"
+       />
+
+   <TextView
+       android:id="@+id/deviceAdmin"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       style="@style/perItemStyle"
+       android:onClick="onDeviceAdminClick"
+       android:text="Device Admin"/>
+
+    <TextView
+        android:id="@+id/appUsageAccess"
+        android:onClick="onAppUsageClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/perItemStyle"
+        android:text="App Usage Access"/>
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/perItemStyle"
+        android:text="Location"/>
+    <TextView
+        android:id="@+id/displayOverOtherApps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/perItemStyle"
+        android:text="Display Over Other Apps"/>
+    <TextView
+        android:id="@+id/accessibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/perItemStyle"
+        android:text="Accessibility"/>
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/perItemStyle"
+        android:text="Phone"/>
+
+
+</LinearLayout>
