@@ -7,12 +7,16 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.Settings
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.ta.pcpoc.accessibility.AccessService
 import com.ta.pcpoc.deviceAdmin.AppAdminReceiver
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         devicePolicyManager = getSystemService(android.content.Context.DEVICE_POLICY_SERVICE) as android.app.admin.DevicePolicyManager
         demoDeviceAdmin =  ComponentName(this, AppAdminReceiver::class.java)
 
+        findViewById<TextView>(R.id.deviceAdmin).setOnClickListener { onDeviceAdminClick() }
+        findViewById<TextView>(R.id.accessibility).setOnClickListener { onAccessibility() }
         initializeView()
     }
 
@@ -47,6 +53,8 @@ class MainActivity : AppCompatActivity() {
 
         if(devicePolicyManager.isAdminActive(demoDeviceAdmin))
             findViewById<TextView>(R.id.deviceAdmin).setTextColor(Color.GREEN)
+        if(AccessService.isAccessServiceEnabled(this))
+            findViewById<TextView>(R.id.accessibility).setTextColor(Color.GREEN)
         //Make your text green if permission etc.. is given.
         //Open activity etc on second click
 
@@ -58,13 +66,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun onDeviceAdminClick(v: View) {
+    fun onDeviceAdminClick() {
 
         if(devicePolicyManager.isAdminActive(demoDeviceAdmin))
         {
-            //Minor test of restriction
-            devicePolicyManager.setCameraDisabled(demoDeviceAdmin, true)
-            Toast.makeText(this, "Camera disabled", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Already admin", Toast.LENGTH_LONG).show()
         }
         else {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
@@ -88,7 +94,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun onAccessibility(v: View) {
+    fun onAccessibility() {
+        if(AccessService.isAccessServiceEnabled(this))
+        {
+            Toast.makeText(this, "Already enabled", Toast.LENGTH_LONG).show()
+        }
+        else{
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivityForResult(intent, PER_REQ_CODE_ACCESSIBILITY)
+        }
 
     }
 
@@ -100,14 +114,28 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             PER_REQ_CODE_DEVICE_ADMIN -> {
                 if (resultCode == Activity.RESULT_OK) {
-                   findViewById<TextView>(R.id.deviceAdmin).setTextColor(Color.GREEN)
+                    findViewById<TextView>(R.id.deviceAdmin).setTextColor(Color.GREEN)
                 } else {
                     findViewById<TextView>(R.id.deviceAdmin).setTextColor(Color.RED)
                 }
                 return
             }
+            PER_REQ_CODE_ACCESSIBILITY -> {
+                Log.d("Access Response:",resultCode.toString())
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+    override fun onResume() {
+        AccessService.isMainActivityRunning= true
+        super.onResume()
+    }
+
+    override fun onPause() {
+        AccessService.isMainActivityRunning = false
+            super.onPause()
+    }
+
 
 }

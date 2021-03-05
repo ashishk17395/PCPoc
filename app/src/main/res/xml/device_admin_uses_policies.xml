@@ -3,6 +3,5 @@
     <uses-policies>
         <watch-login />
         <force-lock />
-        <disable-camera />
     </uses-policies>
 </device-admin>
