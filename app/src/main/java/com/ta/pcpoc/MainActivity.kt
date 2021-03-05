@@ -97,7 +97,10 @@ class MainActivity : AppCompatActivity() {
     fun onAccessibility() {
         if(AccessService.isAccessServiceEnabled(this))
         {
-            Toast.makeText(this, "Already enabled", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Service Disabled", Toast.LENGTH_LONG).show()
+            val intent  = Intent(this, AccessService::class.java)
+            intent.putExtra(AccessService.KEY_STOP_ACCESS_SERVICE, true)
+            startService(intent)
         }
         else{
             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)

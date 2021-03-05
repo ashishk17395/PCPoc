@@ -18,6 +18,8 @@ class AccessService : AccessibilityService() {
 
     companion object {
         var isMainActivityRunning = false
+        var serviceIsStopped = false
+        const val KEY_STOP_ACCESS_SERVICE = "stop_access_service"
         fun isAccessServiceEnabled(context: Context): Boolean {
             val prefString =
                     Settings.Secure.getString(
@@ -32,9 +34,12 @@ class AccessService : AccessibilityService() {
 
     }
 
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        serviceIsStopped = false
+    }
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         when (event.eventType) {
-
             AccessibilityEvent.TYPE_VIEW_CLICKED -> {
                 //On tap of "This is accessibility service label"
                 //D/AccSer:Click::: androidx.core.view.accessibility.AccessibilityNodeInfoCompat@80006d38; boundsInParent: Rect(0, 0 - 1080, 1920); boundsInScreen: Rect(0, 0 - 1080, 1920); packageName: com.android.settings; className: android.widget.FrameLayout; text: null; contentDescription: null; viewId: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; enabled: true; password: false; scrollable: false; [ACTION_SELECT, ACTION_CLEAR_SELECTION, ACTION_ACCESSIBILITY_FOCUS, ACTION_SHOW_ON_SCREEN]
@@ -47,7 +52,7 @@ class AccessService : AccessibilityService() {
                 if (event.source != null)
                     Log.d("AccSer:else::", AccessibilityNodeInfoCompat.wrap(event.source).toString())
 
-                if (rootInActiveWindow != null && rootInActiveWindow.packageName == "com.android.settings") {
+                if (rootInActiveWindow != null && !serviceIsStopped && rootInActiveWindow.packageName == "com.android.settings") {
                     if (rootInActiveWindow.childCount > 0) {
                         if (rootInActiveWindow.getChild(0)?.className == "android.widget.TextView" && rootInActiveWindow.getChild(0)?.text?.contains("Device admin app") == true) {
                             parseHierarchy(rootInActiveWindow, "Label for the device admin")
@@ -69,7 +74,7 @@ class AccessService : AccessibilityService() {
                 }
 
                 //package should be settings and accessibility's name should be in toolbar.
-                if (rootInActiveWindow != null && rootInActiveWindow.packageName == "com.android.settings") {
+                if (rootInActiveWindow != null && !serviceIsStopped &&rootInActiveWindow.packageName == "com.android.settings") {
                     if (rootInActiveWindow.childCount > 0) {
                         for (i in 0 until rootInActiveWindow.childCount) {
                             if (rootInActiveWindow?.getChild(i)?.className == "android.widget.TextView"
@@ -113,4 +118,8 @@ class AccessService : AccessibilityService() {
         }
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        serviceIsStopped = intent?.getBooleanExtra(KEY_STOP_ACCESS_SERVICE, false)?: false
+        return super.onStartCommand(intent, flags, startId)
+    }
 }
