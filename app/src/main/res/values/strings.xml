@@ -4,4 +4,31 @@
     <string name="label_device_admin">Label for the device admin</string>
     <string name="accessibility_service_label">This is accessibility service label</string>
     <string name="accessibility_service_description">This is accessibility service description</string>
+
+
+    <string name="notification_protecting_title">Protecting your apps</string>
+    <string name="notification_protecting_description">Lock your apps to protect your privacy.</string>
+
+    <string name="notification_permission_need_title">Enable permission to protection</string>
+
+    <string name="notification_permission_need_description">Please enable your permissions to use app locker.</string>
+    <string name="you_accept_privacy_policy">By continuing you agree the
+        <u>Privacy Policy</u>
+    </string>
+
+    <string name="dialog_title_usage_permission">Android 5.0 Permission</string>
+    <string name="dialog_description_usage_permission">In Android 5.0 or above, you need to permit usage access for
+        AppLocker, so that you can use SecureBox Feature
+    </string>
+    <string name="dialog_action_usage_permission_permit">Permit</string>
+
+    <string name="dialog_action_usage_permission_cancel">Cancel</string>
+
+    <string name="overlay_prompt_pattern_title">Draw pattern to open app</string>
+    <string name="overlay_prompt_pattern_title_wrong">Wrong pattern. Draw again.</string>
+    <string name="overlay_prompt_pattern_title_correct">Pattern correct.</string>
+
+    <string name="overlay_prompt_fingerprint_title">Draw pattern to open app</string>
+    <string name="overlay_prompt_fingerprint_title_wrong">Not matched. %1$s left.</string>
+
 </resources>

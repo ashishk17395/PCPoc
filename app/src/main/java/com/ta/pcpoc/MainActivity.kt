@@ -13,6 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ta.pcpoc.deviceAdmin.AppAdminReceiver
+import com.ta.pcpoc.displayOverOTherApps.DisplayOverOtherAppsActivity
+import com.ta.pcpoc.phone.CallLogsDetailsActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -85,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onDisplayOverOtherClick(v: View) {
-
+        startActivity(Intent(this, DisplayOverOtherAppsActivity::class.java))
     }
 
     fun onAccessibility(v: View) {
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onPhoneClick(v: View) {
-
+        startActivity(Intent(this,CallLogsDetailsActivity::class.java))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

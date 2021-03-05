@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/dialog_title_usage_permission"
+            android:textColor="@color/colorDialogTitle"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="32dp"
+            android:gravity="center"
+            android:text="@string/dialog_description_usage_permission"
+            android:textColor="@color/colorDialogTitle"
+            android:textSize="18sp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/buttonCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingLeft="32dp"
+                android:paddingTop="16dp"
+                android:paddingRight="32dp"
+                android:paddingBottom="16dp"
+                android:text="@string/dialog_action_usage_permission_cancel"
+                android:textAllCaps="false"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonPermit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:gravity="center"
+                android:paddingLeft="32dp"
+                android:paddingTop="16dp"
+                android:paddingRight="32dp"
+                android:paddingBottom="16dp"
+                android:text="@string/dialog_action_usage_permission_permit"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

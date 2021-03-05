@@ -40,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/perItemStyle"
-        android:text="Display Over Other Apps"/>
+        android:text="Display Over Other Apps"
+        android:onClick="onDisplayOverOtherClick"/>
     <TextView
         android:id="@+id/accessibility"
         android:layout_width="match_parent"
@@ -52,7 +53,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/perItemStyle"
-        android:text="Phone"/>
+        android:text="Phone"
+        android:onClick="onPhoneClick"/>
 
 
 </LinearLayout>

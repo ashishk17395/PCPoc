@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewState"
+            type="com.ta.pcpoc.displayOverOTherApps.view.OverlayViewState" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/layoutOverlayMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_gradient_main"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/adContainer"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:gravity="center" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/textViewPrompt"
+            android:layout_below="@+id/adContainer">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/avatarLock"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="56dp"
+                app:srcCompat="@drawable/ic_lock"
+                android:tint="@color/white"/>
+
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/patternLockView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@{viewState.getPromptMessage(context)}"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <com.andrognito.patternlockview.PatternLockView
+            android:id="@+id/patternLockView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="32dp"
+            app:aspectRatio="square"
+            app:dotNormalSize="16dp"
+            app:dotSelectedSize="24dp"
+            app:inStealthMode="@{viewState.isHiddenDrawingMode}"
+            app:pathWidth="6dp" />
+
+
+    </RelativeLayout>
+
+</layout>
