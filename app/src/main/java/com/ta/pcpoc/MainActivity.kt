@@ -83,7 +83,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onAppUsageClick(v: View) {
-
+        val intent : Intent = Intent(MainActivity@this,AppUsage :: class.java)
+        startActivity(intent)
     }
 
     fun onLocationClick(v: View) {
