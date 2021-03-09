@@ -11,12 +11,13 @@ import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ta.pcpoc.accessibility.AccessService
 import com.ta.pcpoc.deviceAdmin.AppAdminReceiver
-import org.w3c.dom.Text
+import com.ta.pcpoc.kbrd.PCpocKeyboard
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.deviceAdmin).setOnClickListener { onDeviceAdminClick() }
         findViewById<TextView>(R.id.accessibility).setOnClickListener { onAccessibility() }
+        findViewById<TextView>(R.id.myKeyboard).setOnClickListener { onEnableKeyboard() }
         initializeView()
     }
 
@@ -55,6 +57,8 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.deviceAdmin).setTextColor(Color.GREEN)
         if(AccessService.isAccessServiceEnabled(this))
             findViewById<TextView>(R.id.accessibility).setTextColor(Color.GREEN)
+        if(PCpocKeyboard.isCodeBoardEnabled(this))
+            findViewById<TextView>(R.id.myKeyboard).setTextColor(Color.GREEN)
         //Make your text green if permission etc.. is given.
         //Open activity etc on second click
 
@@ -83,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onAppUsageClick(v: View) {
-        val intent : Intent = Intent(MainActivity@this,AppUsage :: class.java)
+        val intent : Intent = Intent(MainActivity@ this, AppUsage::class.java)
         startActivity(intent)
     }
 
@@ -114,6 +118,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun onEnableKeyboard(){
+        if(PCpocKeyboard.isCodeBoardEnabled(this)){
+            if(PCpocKeyboard.isUserUsingThisKeyboard(this))
+                Toast.makeText(this, "Keyboard Already enabled", Toast.LENGTH_LONG).show()
+            else
+            {
+                val imeManager =
+                    applicationContext.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imeManager.showInputMethodPicker()
+            }
+        }
+        else
+            startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             PER_REQ_CODE_DEVICE_ADMIN -> {
@@ -125,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
             PER_REQ_CODE_ACCESSIBILITY -> {
-                Log.d("Access Response:",resultCode.toString())
+                Log.d("Access Response:", resultCode.toString())
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

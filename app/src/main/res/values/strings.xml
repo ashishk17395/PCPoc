@@ -4,4 +4,6 @@
     <string name="label_device_admin">Label for the device admin</string>
     <string name="accessibility_service_label">This is accessibility service label</string>
     <string name="accessibility_service_description">This is accessibility service description</string>
+    <string name="simple_ime">Simple IME</string>
+    <string name="subtype_en_US">English (US)</string>
 </resources>
