@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.ta.pcpoc.LocationServices.LocationActivity
 import com.ta.pcpoc.accessibility.AccessService
 import com.ta.pcpoc.deviceAdmin.AppAdminReceiver
 import org.w3c.dom.Text
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.deviceAdmin).setOnClickListener { onDeviceAdminClick() }
         findViewById<TextView>(R.id.accessibility).setOnClickListener { onAccessibility() }
+        findViewById<TextView>(R.id.location).setOnClickListener{onLocationClick()}
         initializeView()
     }
 
@@ -86,8 +88,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun onLocationClick(v: View) {
-
+    fun onLocationClick() {
+        var intent=Intent(this,LocationActivity::class.java)
+        startActivity(intent)
     }
 
     fun onDisplayOverOtherClick(v: View) {
