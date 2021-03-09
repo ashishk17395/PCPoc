@@ -1,5 +1,6 @@
 package com.ta.pcpoc.displayOverOTherApps
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -9,12 +10,17 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ta.pcpoc.CreateNewPatternActivity
 import com.ta.pcpoc.R
+import com.ta.pcpoc.databinding.ActivityDisplayOverOtherAppsBinding
 import com.ta.pcpoc.displayOverOTherApps.permissions.PermissionChecker
 import com.ta.pcpoc.displayOverOTherApps.permissions.UsageAccessPermissionDialog
+import com.ta.pcpoc.displayOverOTherApps.ui.DisplayOverOtherAppsViewModel
+import com.ta.pcpoc.displayOverOTherApps.ui.OverlayValidationActivity
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -22,16 +28,18 @@ import java.util.concurrent.locks.Lock
 import kotlin.collections.ArrayList
 
 
-class DisplayOverOtherAppsActivity : AppCompatActivity(), RecyclerItemClickInterface {
+class DisplayOverOtherAppsActivity : BaseActivity<DisplayOverOtherAppsViewModel>(), RecyclerItemClickInterface {
     private val TAG = "DisplayOverOtherApps"
     private lateinit var recyclerView : RecyclerView
     private lateinit var adapter : AppLockListAdapter
     private var lockAppDao: LockAppDao? = null
     val appArrayList = ArrayList<LockAppEntity>()
+    private lateinit var binding: ActivityDisplayOverOtherAppsBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_display_over_other_apps)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_display_over_other_apps)
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
         val db = AppDatabase.getAppDataBase(this)
@@ -58,6 +66,23 @@ class DisplayOverOtherAppsActivity : AppCompatActivity(), RecyclerItemClickInter
             }
 
         }
+
+        viewModel.getPatternCreationNeedLiveData().observe(this, Observer { isPatternCreateNeed ->
+            when {
+                isPatternCreateNeed -> {
+                    startActivityForResult(
+                        CreateNewPatternActivity.newIntent(this),
+                        RC_CREATE_PATTERN
+                    )
+                }
+                viewModel.isAppLaunchValidated().not() -> {
+                    startActivityForResult(
+                        OverlayValidationActivity.newIntent(this, this.packageName),
+                        RC_VALIDATE_PATTERN
+                    )
+                }
+            }
+        })
     }
 
     fun getAllApps(): List<LockAppEntity> {
@@ -75,7 +100,7 @@ class DisplayOverOtherAppsActivity : AppCompatActivity(), RecyclerItemClickInter
     }
 
     override fun onItemClick(position: Int) {
-        if (PermissionChecker.checkUsageAccessPermission(this).not()) {
+        if (!PermissionChecker.checkUsageAccessPermission(this)) {
             UsageAccessPermissionDialog.newInstance().show(supportFragmentManager, "")
         } else {
             GlobalScope.launch {
@@ -87,4 +112,38 @@ class DisplayOverOtherAppsActivity : AppCompatActivity(), RecyclerItemClickInter
 
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            RC_CREATE_PATTERN -> {
+                viewModel.onAppLaunchValidated()
+                showPrivacyPolicyIfNeeded()
+                if (resultCode != Activity.RESULT_OK) {
+                    finish()
+                }
+            }
+            RC_VALIDATE_PATTERN -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    viewModel.onAppLaunchValidated()
+                    showPrivacyPolicyIfNeeded()
+                } else {
+                    finish()
+                }
+            }
+        }
+    }
+
+    private fun showPrivacyPolicyIfNeeded() {
+        if (viewModel.isPrivacyPolicyAccepted().not()) {
+            PrivacyPolicyDialog.newInstance().show(supportFragmentManager, "")
+        }
+    }
+
+    companion object {
+        private const val RC_CREATE_PATTERN = 2002
+        private const val RC_VALIDATE_PATTERN = 2003
+    }
+
+    override fun getViewModel(): Class<DisplayOverOtherAppsViewModel> = DisplayOverOtherAppsViewModel::class.java
 }

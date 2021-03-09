@@ -4,11 +4,14 @@ import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import com.ta.pcpoc.displayOverOTherApps.data.PatternDao
+import com.ta.pcpoc.displayOverOTherApps.data.PatternEntity
 
-@Database(entities = [LockAppEntity::class], version = 1, exportSchema = false)
+@Database(entities = [LockAppEntity::class, PatternEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun lockAppDao(): LockAppDao
+    abstract fun patternDao(): PatternDao
 
     companion object {
         var INSTANCE: AppDatabase? = null

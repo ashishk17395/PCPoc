@@ -7,9 +7,13 @@ import com.ta.pcpoc.displayOverOTherApps.worker.WorkerStarter
 
 class PCPocApp: Application() {
 
+    companion object {
+        lateinit var sContext: Context
+    }
 
     override fun onCreate() {
         super.onCreate()
+        sContext = getApplicationContext();
         ServiceStarter.startService(this)
         WorkerStarter.startServiceCheckerWorker()
     }

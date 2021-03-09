@@ -1,5 +1,6 @@
 package com.ta.pcpoc.displayOverOTherApps.service
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,11 +10,8 @@ import android.os.IBinder
 import android.util.Log
 import android.view.WindowManager
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.andrognito.patternlockview.PatternLockView
-import com.ta.pcpoc.displayOverOTherApps.LockAppDao
-import com.ta.pcpoc.displayOverOTherApps.LockAppEntity
+import com.ta.pcpoc.displayOverOTherApps.AppDatabase
 import com.ta.pcpoc.displayOverOTherApps.data.AppLockerPreferences
 import com.ta.pcpoc.displayOverOTherApps.data.PatternDao
 import com.ta.pcpoc.displayOverOTherApps.data.PatternDot
@@ -35,7 +33,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import java.util.*
 import kotlin.collections.HashSet
 
 class AppLockerService : Service() {
@@ -46,9 +43,9 @@ class AppLockerService : Service() {
 
     lateinit var permissionCheckerObservable: PermissionCheckerObservable
 
-    lateinit var lockedAppsDao : LockAppDao
+    //lateinit var lockedAppsDao : LockAppDao
 
-    lateinit var patternDao: PatternDao
+    //lateinit var patternDao: PatternDao
 
     lateinit var appLockerPreferences: AppLockerPreferences
 
@@ -152,22 +149,23 @@ class AppLockerService : Service() {
     }
 
     private fun observeLockedApps() {
-        allDisposables += lockedAppsDao.getLockedApps()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { lockedAppList ->
-                    lockedAppPackageSet.clear()
-                    lockedAppList.forEach { lockedAppPackageSet.add(it.appName) }
-                    SystemPackages.getSystemPackages().forEach { lockedAppPackageSet.add(it) }
-                },
-                { error -> Log.d("exception",error.localizedMessage)})
+            allDisposables += AppDatabase.getAppDataBase(applicationContext)?.lockAppDao()?.getLockedApps()
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(
+                    { lockedAppList ->
+                        lockedAppPackageSet.clear()
+                        lockedAppList.forEach { lockedAppPackageSet.add(it.appName) }
+                        SystemPackages.getSystemPackages().forEach { lockedAppPackageSet.add(it) }
+                    },
+                    { error -> Log.d("exception",error.localizedMessage)})!!
+
     }
 
     private fun observeOverlayView() {
         allDisposables += Flowable
             .combineLatest(
-                patternDao.getPattern().map { it.patternMetadata.pattern },
+                AppDatabase.getAppDataBase(applicationContext)?.patternDao()?.getPattern()?.map { it.patternMetadata.pattern },
                 validatedPatternObservable.toFlowable(BackpressureStrategy.BUFFER),
                 PatternValidatorFunction()
             )
@@ -185,6 +183,7 @@ class AppLockerService : Service() {
     }
 
     private fun observeForegroundApplication() {
+        appForegroundObservable = AppForegroundObservable(applicationContext)
         if (foregroundAppDisposable != null && foregroundAppDisposable?.isDisposed?.not() == true) {
             return
         }
@@ -206,7 +205,8 @@ class AppLockerService : Service() {
     }
 
     private fun observePermissionChecker() {
-        permissionCheckerObservable
+        permissionCheckerObservable = PermissionCheckerObservable(applicationContext)
+        allDisposables += permissionCheckerObservable
             .get()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

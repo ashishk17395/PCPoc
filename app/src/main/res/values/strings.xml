@@ -15,10 +15,15 @@
     <string name="you_accept_privacy_policy">By continuing you agree the
         <u>Privacy Policy</u>
     </string>
+    <string name="dialog_title_privacy_policy">Privacy Policy</string>
+    <string name="dialog_description_privacy_policy">We have updated our privacy policy. By continuing you agree the
+        <u>Privacy Policy</u>
+    </string>
+    <string name="dialog_action_privacy_policy_accept">Accept</string>
 
     <string name="dialog_title_usage_permission">Android 5.0 Permission</string>
     <string name="dialog_description_usage_permission">In Android 5.0 or above, you need to permit usage access for
-        AppLocker, so that you can use SecureBox Feature
+        AppLocker, so that you can use PCPoc Feature
     </string>
     <string name="dialog_action_usage_permission_permit">Permit</string>
 
@@ -30,5 +35,12 @@
 
     <string name="overlay_prompt_fingerprint_title">Draw pattern to open app</string>
     <string name="overlay_prompt_fingerprint_title_wrong">Not matched. %1$s left.</string>
+
+    <string name="draw_pattern_title">Create a new pattern</string>
+    <string name="redraw_pattern_title">Redraw to complete</string>
+
+    <string name="recreate_pattern_error">Pattern does not match. Redraw.</string>
+
+    <string name="create_pattern_successful">Successfully created.</string>
 
 </resources>

@@ -23,5 +23,5 @@ abstract class PatternDao {
     abstract fun isPatternCreated(): Flowable<Int>
 
     @Query("DELETE FROM pattern")
-    abstract fun deletePattern()
+    open abstract fun deletePattern()
 }
