@@ -84,7 +84,8 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, PER_REQ_CODE_DEVICE_ADMIN)
         }
 
-
+        val intent : Intent = Intent(MainActivity@this,AppUsage :: class.java)
+        startActivity(intent)
     }
 
     fun onAppUsageClick(v: View) {
